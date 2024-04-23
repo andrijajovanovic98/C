@@ -9,7 +9,7 @@
 /*   Updated: 2024/04/21 08:29:13 by ajovanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../library/ft_printf.h"
+#include "ft_printf.h"
 
 static size_t	ft_intlen(unsigned int n)
 {

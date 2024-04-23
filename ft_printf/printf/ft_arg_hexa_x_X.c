@@ -9,7 +9,7 @@
 /*   Updated: 2024/04/21 08:30:10 by ajovanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../library/ft_printf.h"
+#include "ft_printf.h"
 
 static int	ft_len(unsigned int n)
 {
