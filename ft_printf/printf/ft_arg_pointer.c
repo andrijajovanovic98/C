@@ -20,6 +20,10 @@ static void	ft_conv_ptr(unsigned long long num)
 	hex_dig = "0123456789abcdef";
 	i = 0;
 	if (num == 0)
+	{
+		ft_putchar_fd('0', 1)
+		return ;
+	}
 	while (num != 0)
 	{
 		buffer[i++] = hex_dig[num % 16];
