@@ -29,7 +29,7 @@ int	msg(void)
 	i = 0;
 	output = "invalid number of arguments\n";
 	write(2, &output[i], ft_strlen(output));
-	return (1);
+	exit(1);
 }
 
 void	error(void)
@@ -43,8 +43,10 @@ void	free_parent(t_struct *mystr)
 	int	i;
 
 	i = 0;
-	close(mystr->infile);
-	close(mystr->outfile);
+	if (mystr->infile != -1)
+		close(mystr->infile);
+	if (mystr->outfile != -1)
+		close(mystr->outfile);
 	while (mystr->cmd_paths[i])
 	{
 		free(mystr->cmd_paths[i]);

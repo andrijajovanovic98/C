@@ -6,7 +6,7 @@
 /*   By: ajovanov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 13:22:29 by ajovanov          #+#    #+#             */
-/*   Updated: 2024/06/16 11:26:24 by ajovanov         ###   ########.fr       */
+/*   Updated: 2024/06/19 19:20:30 by ajovanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,23 +43,21 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	int		i;
 
 	i = 0;
-	if (s1 == NULL)
+	len1 = 0;
+	len2 = 0;
+	if (!s1 && s2)
 		return (NULL);
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
+	if (s1)
+		len1 = ft_strlen(s1);
+	if (s2)
+		len2 = ft_strlen(s2);
 	res = (char *)malloc((len1 + len2 +1) * sizeof(char));
 	if (!res)
 		return (NULL);
-	while (*s1)
-	{
-		res[i++] = *s1;
-		s1++;
-	}
-	while (*s2)
-	{
-		res[i++] = *s2;
-		s2++;
-	}
+	while (s1 && *s1)
+		res[i++] = *s1++;
+	while (s2 && *s2)
+		res[i++] = *s2++;
 	res[i] = '\0';
 	return (res);
 }
@@ -83,4 +81,13 @@ char	*ft_strdup(const char *s1)
 	}
 	res[i] = '\0';
 	return (res);
+}
+
+void	close_if(int fd)
+{
+	if (fd != -1)
+	{
+		close(fd);
+		fd = -1;
+	}
 }

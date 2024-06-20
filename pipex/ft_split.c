@@ -98,7 +98,7 @@ char	**ft_split(char *s, char c)
 	char	**result;
 	size_t	word_count;
 
-	if (s == NULL)
+	if (s == NULL || !*s || *s == 32)
 		return (NULL);
 	word_count = ft_count_words(s, c);
 	result = malloc((word_count + 1) * sizeof(char *));
