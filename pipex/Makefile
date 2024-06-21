@@ -1,5 +1,17 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: ajovanov <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/06/21 10:25:10 by ajovanov          #+#    #+#              #
+#    Updated: 2024/06/21 10:25:13 by ajovanov         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME = pipex
-CC = cc -g
+CC = cc
 CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
 SRC = processes.c utils.c pipex.c ft_split.c error_and_free.c
