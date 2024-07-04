@@ -105,8 +105,6 @@ char	**ft_split(char *s, char c)
 	if (result == NULL)
 		return (NULL);
 	if (!ft_fill(result, s, c, word_count))
-	{
 		return (NULL);
-	}
 	return (result);
 }

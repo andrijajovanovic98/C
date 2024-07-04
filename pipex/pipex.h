@@ -5,48 +5,47 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ajovanov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/15 13:29:57 by ajovanov          #+#    #+#             */
-/*   Updated: 2024/06/19 19:19:25 by ajovanov         ###   ########.fr       */
+/*   Created: 2024/06/30 16:57:59 by ajovanov          #+#    #+#             */
+/*   Updated: 2024/06/30 16:58:01 by ajovanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #ifndef PIPEX_H
 # define PIPEX_H
 
 # include <string.h>
-# include <sys/wait.h>
-# include <stdio.h>
 # include <unistd.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <fcntl.h>
-# include <errno.h>
+# include <sys/wait.h>
 
-typedef struct s_mystr
+typedef struct s_stk
 {
-	char	*paths;
-	char	**cmd_paths;
-	char	**cmd_args;
+	int		i;
+	int		status1;
+	int		status2;
+	char	*path_env;
+	char	**path_dirs;
+	char	*command_path;
 	char	*cmd;
 	pid_t	pid1;
 	pid_t	pid2;
-	int		pipe_fds[2];
 	int		infile;
 	int		outfile;
-}	t_struct;
+	char	**cmd_args;
+}	t_stk;
 
 char	**ft_split(char *s, char c);
-char	*ft_strdup(const char *src);
-size_t	ft_strlen(const char *s);
-void	first_child(t_struct mystr, char *argv[], char *envp[]);
-void	second_child(int ac, t_struct mystr, char *argv[], char *envp[]);
-void	free_parent(t_struct *mystr);
-void	child_free(t_struct *mystr);
-int		msg(void);
-void	error(void);
+char	*ft_strjoin(char *s1, char *s2);
+void	*ft_memset(void *s, int c, size_t n);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
-char	*ft_strjoin(char const *s1, char const *s2);
-void	free_if(char **ptr);
-void	close_if(int fd);	
-void	close_pipes(t_struct *mystr);
+char	*ft_strjoin(char *s1, char *s2);
+void	close_fds_and_exit(int *pipefd, int fd1, int fd2, char *msg);
+void	free_string_array(char **array);
+void	check_is_directory(char *arg);
+size_t	ft_strlen(const char *s);
+void	msg(char *output);
+void	close_pipes(int *pipefd);
+int		exit_status(t_stk *var);
 
 #endif

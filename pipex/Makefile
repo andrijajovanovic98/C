@@ -1,41 +1,31 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: ajovanov <marvin@42.fr>                    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/06/21 10:25:10 by ajovanov          #+#    #+#              #
-#    Updated: 2024/06/21 10:25:13 by ajovanov         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME = pipex
-CC = cc
+CC = cc -g
 CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
-SRC = processes.c utils.c pipex.c ft_split.c error_and_free.c
+SRC = free.c pipex.c ft_split.c utils.c
 ODIR = Ofiles
-MOBJ = $(patsubst %.c,$(ODIR)/%.o,$(SRC))
+MOBJ = $(SRC:%.c=$(ODIR)/%.o)
 
 all: $(ODIR) $(NAME)
 
 $(ODIR):
 	mkdir -p $(ODIR)
 
-$(NAME): $(MOBJ) pipex.h
+$(NAME): $(MOBJ)
 	$(CC) $(CFLAGS) $(MOBJ) -o $(NAME)
 
-$(ODIR)/%.o: %.c
-	@$(CC) $(CFLAGS) -c $< -o $@
+$(ODIR)/%.o: %.c | $(ODIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	$(RM) $(MOBJ)
-	$(RM) -r $(ODIR)
+	$(RM) -rf $(ODIR)
 
 fclean: clean
 	$(RM) $(NAME)
+	rm -rf $(ODIR)
 
 re: fclean all
 
 .PHONY: all clean fclean re
+

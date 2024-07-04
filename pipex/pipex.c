@@ -5,98 +5,130 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ajovanov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/15 13:29:08 by ajovanov          #+#    #+#             */
-/*   Updated: 2024/06/20 11:22:42 by ajovanov         ###   ########.fr       */
+/*   Created: 2024/06/30 09:50:05 by ajovanov          #+#    #+#             */
+/*   Updated: 2024/06/30 09:50:09 by ajovanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "pipex.h"
 
-void	check_is_directory(const char *filepath)
+char	*find_path(char **env)
 {
-	int		fd;
-	char	buffer[1];
-
-	fd = open(filepath, O_RDONLY);
-	if (fd < 0)
-		return ;
-	if (read(fd, buffer, 1) == -1)
+	while (*env)
 	{
-		close(fd);
-		error();
+		if (ft_strncmp(*env, "PATH=", 5) == 0)
+			return (*env + 5);
+		env++;
 	}
-	close(fd);
+	return (NULL);
 }
 
-void	initialize_mystr(int ac, char **av, t_struct *mystr)
+char	*find_command(t_stk var, char *cmd_args, char **env)
 {
-	if (ac != 5)
-		msg();
-	check_is_directory(av[1]);
-	if (pipe(mystr->pipe_fds) < 0)
-		error();
-	mystr->infile = -1;
-	mystr->outfile = -1;
-}
-
-void	close_pipes(t_struct *mystr)
-{
-	close(mystr->pipe_fds[0]);
-	close(mystr->pipe_fds[1]);
-}
-
-char	*search_path(char **envp, t_struct *mystr)
-{
-	int		path_found;
-	int		i;
-
-	i = 0;
-	path_found = 0;
-	while (envp[i])
+	var.i = 0;
+	var.path_env = find_path(env);
+	if (!var.path_env)
+		return (write(2, "Path error\n", 11), NULL);
+	var.path_dirs = ft_split(var.path_env, ':');
+	if (!var.path_dirs)
+		return (NULL);
+	while (var.path_dirs[var.i])
 	{
-		if (ft_strncmp(envp[i], "PATH", 4) == 0)
+		var.command_path = ft_strjoin(var.path_dirs[var.i], cmd_args);
+		if (access(var.command_path, X_OK) == 0)
 		{
-			path_found = 1;
-			break ;
+			free_string_array(var.path_dirs);
+			return (var.command_path);
 		}
-		i++;
+		free(var.command_path);
+		var.i++;
 	}
-	if (!path_found)
+	free_string_array(var.path_dirs);
+	write(2, "Command not found\n", 18);
+	return (NULL);
+}
+
+void	child(int *pipefd, t_stk var, char **av, char **env)
+{
+	var.infile = open(av[1], O_RDONLY, 0777);
+	if (var.infile == -1)
+		close_fds_and_exit(pipefd, -1, -1, "open infile");
+	if (dup2(pipefd[1], STDOUT_FILENO) == -1)
+		close_fds_and_exit(pipefd, -1, var.infile, "dup2 pipefd[1]");
+	close(pipefd[1]);
+	close(pipefd[0]);
+	if (dup2(var.infile, STDIN_FILENO) == -1)
+		close_fds_and_exit(NULL, -1, -1, "dup2 var.infile");
+	close(var.infile);
+	var.cmd_args = ft_split(av[2], ' ');
+	if (!var.cmd_args)
+		msg("Command not found\n");
+	if (access(av[2], X_OK) == 0)
+		execve(av[2], var.cmd_args, env);
+	var.cmd = find_command(var, var.cmd_args[0], env);
+	if (!var.cmd)
 	{
-		error();
-		close_pipes(mystr);
-		close(mystr->infile);
-		close(mystr->outfile);
+		free_string_array(var.cmd_args);
+		exit(EXIT_FAILURE);
+	}
+	execve(var.cmd, var.cmd_args, env);
+	free_string_array(var.cmd_args);
+	free(var.cmd);
+	msg("Execve error\n");
+}
+
+void	childtwo(int *pipefd, t_stk var, char **av, char **env)
+{
+	var.outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (var.outfile == -1)
+		close_fds_and_exit(pipefd, -1, -1, "openoutfile");
+	if (dup2(pipefd[0], STDIN_FILENO) == -1)
+		close_fds_and_exit(pipefd, pipefd[0], pipefd[1], "dup2 pipefd[0]");
+	close(pipefd[0]);
+	close(pipefd[1]);
+	if (dup2(var.outfile, STDOUT_FILENO) == -1)
+		close_fds_and_exit(NULL, -1, -1, "dup2 var.outfile");
+	close(var.outfile);
+	var.cmd_args = ft_split(av[3], ' ');
+	if (!var.cmd_args)
+		msg("Command not found");
+	if (access(av[3], X_OK) == 0)
+		execve(av[3], var.cmd_args, env);
+	var.cmd = find_command(var, var.cmd_args[0], env);
+	if (!var.cmd)
+	{
+		free_string_array(var.cmd_args);
 		exit(1);
 	}
-	while (ft_strncmp("PATH", *envp, 4))
-		envp++;
-	return (*envp + 5);
+	execve(var.cmd, var.cmd_args, env);
+	free_string_array(var.cmd_args);
+	free(var.cmd);
+	msg("Execve error\n");
 }
 
-int	main(int ac, char **av, char **envp)
+int	main(int argc, char **argv, char **env)
 {
-	t_struct	mystr;
+	t_stk	var;
+	int		pipefd[2];
 
-	initialize_mystr(ac, av, &mystr);
-	mystr.paths = search_path(envp, &mystr);
-	if (mystr.paths == NULL)
-		return (0);
-	mystr.cmd_paths = ft_split(mystr.paths, ':');
-	if (mystr.cmd_paths == NULL)
-		return (0);
-	mystr.pid1 = fork();
-	if (mystr.pid1 == -1)
-		error();
-	if (mystr.pid1 == 0)
-		first_child(mystr, av, envp);
-	mystr.pid2 = fork();
-	if (mystr.pid2 == -1)
-		error();
-	if (mystr.pid2 == 0)
-		second_child(ac, mystr, av, envp);
-	close_pipes(&mystr);
-	waitpid(mystr.pid1, NULL, 0);
-	waitpid(mystr.pid2, NULL, 0);
-	free_parent(&mystr);
+	ft_memset(&var, -1, sizeof(t_stk));
+	if (argc != 5)
+		msg("Invalide numbser of arguments\n");
+	check_is_directory(argv[1]);
+	if (pipe(pipefd) < 0)
+		msg("Pipe error\n");
+	var.pid1 = fork();
+	if (var.pid1 == -1)
+		msg("Fork error\n");
+	if (var.pid1 == 0)
+		child(pipefd, var, argv, env);
+	var.pid2 = fork();
+	if (var.pid2 == -1)
+		msg("Fork error\n");
+	if (var.pid2 == 0)
+		childtwo(pipefd, var, argv, env);
+	close_pipes(pipefd);
+	waitpid(var.pid1, &var.status1, 0);
+	waitpid(var.pid2, &var.status2, 0);
+	exit_status(&var);
 	return (0);
 }
