@@ -26,6 +26,7 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <stdint.h>
 # include "get_next_line.h"
 
 typedef struct s_path
@@ -104,5 +105,7 @@ char	*ft_itoa(int n);
 char	*ft_strdup(char *s);
 char	*ft_strcpy(char *dest, const char *src);
 size_t	ft_strcspn(const char *src, const char *reject);
+void	*ft_calloc(size_t nmemb, size_t size);
+void	ft_bzero(void *s, size_t n);
 
 #endif

@@ -9,13 +9,13 @@
 #    Updated: 2024/06/28 12:23:00 by ajovanov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-CC = cc
+CC = cc -g
 
 CFLAGS = -Wall -Wextra -Werror -Iincludes
 
 MLXFLAGS = -lmlx -lXext -lX11 -lm
 
-SRCS = srcs/main.c srcs/map.c srcs/draw.c srcs/close_window.c srcs/load_images.c srcs/free_function.c srcs/heightwidth.c srcs/get_next_line.c srcs/get_next_line_utils.c srcs/checks.c srcs/checkstwo.c srcs/checksthree.c srcs/utils.c srcs/utilstwo.c
+SRCS = srcs/main.c srcs/map.c srcs/draw.c srcs/close_window.c srcs/load_images.c srcs/free_function.c srcs/heightwidth.c srcs/get_next_line.c srcs/get_next_line_utils.c srcs/checks.c srcs/checkstwo.c srcs/checksthree.c srcs/utils.c srcs/utilstwo.c srcs/ft_calloc.c srcs/ft_bzero.c
 
 HDRS = includes/game.h includes/get_next_line.h
 

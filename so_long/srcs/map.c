@@ -54,14 +54,14 @@ char	**allocate_map(int fd, int height)
 	int		i;
 	char	*line;
 
-	map = malloc((height + 1) * sizeof(char *));
+	map = ft_calloc((height + 1), sizeof(char *));
 	if (!map)
 		return (NULL);
 	i = 0;
 	line = get_next_line(fd, 0);
 	while (line != NULL && i < height)
 	{
-		map[i] = malloc(ft_strlenn(line) + 1);
+		map[i] = ft_calloc(ft_strlenn(line) + 1, sizeof(char));
 		if (!map[i])
 			return (clean_map(map, i, line), get_next_line(fd, 1), NULL);
 		ft_strcpy(map[i], line);

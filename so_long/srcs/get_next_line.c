@@ -104,7 +104,7 @@ char	*get_next_line(int fd, int clean)
 
 	read_bytes = 1;
 	if (fd < 0 || BUFFER_SIZE < 0 || BUFFER_SIZE > INT_MAX)
-		return (read_buffer = NULL, NULL);
+		return (free(read_buffer), read_buffer = NULL, NULL);
 	if (clean == 1)
 		return (free(read_buffer), NULL);
 	read_content = malloc(BUFFER_SIZE + 1);
