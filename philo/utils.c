@@ -21,7 +21,7 @@ int	check_everybody_has_aten(t_struct *common_var)
 	has_eaten = 0;
 	pthread_mutex_lock(&common_var->monitor);
 	testke = common_var->philos[i].this_philo_need_to_eat;
-	if (common_var->nb_filos > 100 )
+	if (common_var->nb_filos > 100)
 		testke = common_var->philos
 		[common_var->nb_filos - 1].this_philo_need_to_eat;
 	pthread_mutex_unlock(&common_var->monitor);
