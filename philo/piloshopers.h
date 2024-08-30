@@ -71,6 +71,7 @@ void		convert_args_and_init(t_struct *common_var, char **argv);
 // philos
 
 void		*filos(void *arg);
+int			onephilo_util(t_struct *common_var);
 
 // time
 

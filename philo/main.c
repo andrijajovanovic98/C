@@ -16,11 +16,8 @@ int	decide_to_eat(t_struct *common_var, int thisphilo, int print_id)
 	int			left_fork;
 	int			right_fork;
 
-	if (common_var->nb_filos == 1)
-	{
-		common_var->just_one_philo = 1;
+	if (onephilo_util(common_var) == 1)
 		return (1);
-	}
 	left_fork = thisphilo;
 	right_fork = (thisphilo + 1) % common_var->nb_filos;
 	if (thisphilo % 2 == 0)

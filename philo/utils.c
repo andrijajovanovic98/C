@@ -21,7 +21,7 @@ int	check_everybody_has_aten(t_struct *common_var)
 	has_eaten = 0;
 	pthread_mutex_lock(&common_var->monitor);
 	testke = common_var->philos[i].this_philo_need_to_eat;
-	if (common_var->nb_filos > 100 )
+	if (common_var->nb_filos > 100)
 		testke = common_var->philos
 		[common_var->nb_filos - 1].this_philo_need_to_eat;
 	pthread_mutex_unlock(&common_var->monitor);
@@ -45,6 +45,16 @@ void	just_one_philo(t_struct *common_var, int print_id)
 	pthread_mutex_lock(&common_var->monitor);
 	common_var->game_over = 1;
 	pthread_mutex_unlock(&common_var->monitor);
+}
+
+int	onephilo_util(t_struct *common_var)
+{
+	if (common_var->nb_filos == 1)
+	{
+		common_var->just_one_philo = 1;
+		return (1);
+	}
+	return (0);
 }
 
 void	uninterrupted_activites(t_struct *common_var,

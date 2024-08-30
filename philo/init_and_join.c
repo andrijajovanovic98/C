@@ -59,7 +59,14 @@ int	creating_philos(t_struct *common_var, pthread_t *threads)
 		common_var->philos[i].this_philo_need_to_eat = common_var->nb_eats;
 		if (pthread_create(&threads[i], NULL, filos,
 				&common_var->philos[i]) != 0)
-			return (write(2, "Thread creation failed\n", 23), 1);
+		{
+			pthread_mutex_lock(&common_var->monitor);
+			common_var->game_over = 1;
+			pthread_mutex_unlock(&common_var->monitor);
+			while (i--)
+				pthread_join(threads[i], NULL);
+			return (1);
+		}
 		i++;
 	}
 	return (0);
