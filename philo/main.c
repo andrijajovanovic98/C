@@ -24,7 +24,9 @@ int	decide_to_eat(t_struct *common_var, int thisphilo, int print_id)
 	left_fork = thisphilo;
 	right_fork = (thisphilo + 1) % common_var->nb_filos;
 	if (thisphilo % 2 == 0)
-		usleep(100);
+		usleep(1000);
+	else
+		usleep(500);
 	if (left_fork < right_fork)
 	{
 		pthread_mutex_lock(&common_var->forks[left_fork]);

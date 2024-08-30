@@ -63,7 +63,7 @@ void	uninterrupted_unlock(t_struct *common_var, int thisphilo)
 void	uninterrupted_couting_and_finishing(t_struct *common_var, int thisphilo)
 {
 	pthread_mutex_lock(&common_var->monitor);
-	if (common_var->philos[thisphilo].this_philo_need_to_eat > 0)
+	if (common_var->philos[thisphilo].this_philo_need_to_eat > 0 && common_var->philos[thisphilo].this_philo_need_to_eat != 999)
 		common_var->philos[thisphilo].this_philo_need_to_eat--;
 	pthread_mutex_unlock(&common_var->monitor);
 	if (check_everybody_has_aten(common_var) == 1)

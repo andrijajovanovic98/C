@@ -28,7 +28,6 @@ int	monitor_loop_util2(t_struct *common_var, int currenttime, int timeke, int i)
 		{
 			timestamp_calc(&timestamp, common_var);
 			pthread_mutex_lock(&common_var->monitor);
-			usleep(100);
 			printf("%ld %d is died\n", timestamp + common_var->passent, i + 1);
 			pthread_mutex_unlock(&common_var->monitor);
 			pthread_mutex_unlock(&common_var->meal_check);
@@ -93,9 +92,11 @@ void	*monitor_philos(void *arg)
 		pthread_mutex_lock(&common_var->monitor);
 		game_over = common_var->game_over;
 		pthread_mutex_unlock(&common_var->monitor);
-		if (game_over == 1)
-			usleep(100);
+		usleep(100);
 		monitor_util(common_var);
+		pthread_mutex_lock(&common_var->monitor);
+		game_over = common_var->game_over;
+		pthread_mutex_unlock(&common_var->monitor);
 	}
 	return (NULL);
 }

@@ -1,6 +1,6 @@
 NAME = philo
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 RM = rm -f
 SRC = main.c check_args.c check_args_utils.c init_and_join.c time.c activities_separately.c monitoring.c utils.c
 ODIR = Ofiles
