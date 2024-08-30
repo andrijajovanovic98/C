@@ -28,6 +28,7 @@ typedef struct s_philo_args
 
 typedef struct s_struct
 {
+	int				infinity;
 	int				passent;
 	long int		start_time;
 	int				forkunlockrichtung;

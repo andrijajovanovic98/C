@@ -14,6 +14,9 @@
 void	convert_args_and_init(t_struct *common_var, char **argv)
 {
 	common_var->nb_eats = 999;
+	common_var->infinity = 0;
+	if (argv[5] == NULL)
+		common_var->infinity = 1;
 	common_var->nb_filos = ft_atoi(argv[1]);
 	common_var->time_die = ft_atoi(argv[2]);
 	common_var->time_eat = ft_atoi(argv[3]);
