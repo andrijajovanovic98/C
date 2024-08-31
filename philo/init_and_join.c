@@ -14,7 +14,6 @@
 void	convert_args_and_init(t_struct *common_var, char **argv)
 {
 	common_var->nb_eats = 999;
-	common_var->infinity = 0;
 	if (argv[5] == NULL)
 		common_var->infinity = 1;
 	common_var->nb_filos = ft_atoi(argv[1]);
@@ -28,11 +27,7 @@ void	convert_args_and_init(t_struct *common_var, char **argv)
 	common_var->stop_print = 1;
 	common_var->just_one_philo = 0;
 	common_var->passent = 0;
-	if (common_var->time_die == common_var->time_eat + common_var->time_sleep)
-	{
-		common_var->passent = 1;
-		common_var->time_die--;
-	}
+	justone(common_var);
 }
 
 int	init_forks(t_struct *common_var)

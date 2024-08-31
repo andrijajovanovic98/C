@@ -73,6 +73,8 @@ void		convert_args_and_init(t_struct *common_var, char **argv);
 
 void		*filos(void *arg);
 int			onephilo_util(t_struct *common_var);
+void		justone(t_struct *common_var);
+void		even(t_struct *common_var);
 
 // time
 

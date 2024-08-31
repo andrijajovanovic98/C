@@ -35,3 +35,39 @@ long int	ft_atoi(char *str)
 	}
 	return (num);
 }
+
+void	justone(t_struct *common_var)
+{
+	int	i;
+	int	b;
+	int	c;
+	int	d;
+
+	i = common_var->time_die;
+	b = common_var->time_eat;
+	c = common_var->time_sleep;
+	d = common_var->nb_filos;
+	if ((i == b + c) || (d % 2 != 0 && 3 * b == i))
+	{
+		common_var->passent = 1;
+		common_var->time_die--;
+	}
+	if (common_var->nb_filos > 99 && common_var->nb_filos % 2 != 0
+		&& common_var->time_die <= 3 * common_var->time_eat)
+	{
+		common_var->passent = 2;
+		common_var->time_die -= 2;
+	}
+	if (d % 2 == 0 && b == c && (i - (2 * b)) == 1)
+	{
+		common_var->passent = -1;
+		common_var->time_die++;
+	}
+}
+
+void	even(t_struct *common_var)
+{
+	if (common_var->time_eat / common_var->time_sleep
+		== 2 && common_var->nb_filos == 5)
+		usleep(100000);
+}

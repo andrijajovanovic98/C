@@ -24,8 +24,7 @@ int	decide_to_eat(t_struct *common_var, int thisphilo, int print_id)
 		usleep(1000);
 	else
 		usleep(500);
-	if (common_var->time_eat / common_var->time_sleep == 2)
-		usleep(100000);
+	even(common_var);
 	if (left_fork < right_fork)
 	{
 		pthread_mutex_lock(&common_var->forks[left_fork]);
@@ -99,6 +98,7 @@ int	tryingtoinitmeal(t_struct *common_var)
 	int	i;
 
 	i = 0;
+	common_var->infinity = 0;
 	common_var->last_meal_times
 		= malloc(sizeof(long int) * common_var->nb_filos);
 	if (common_var->last_meal_times == NULL)
