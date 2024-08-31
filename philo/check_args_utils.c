@@ -67,7 +67,7 @@ void	justone(t_struct *common_var)
 
 void	even(t_struct *common_var)
 {
-	if (common_var->time_eat / common_var->time_sleep
-		== 2 && common_var->nb_filos == 5)
+	if ((common_var->time_eat / common_var->time_sleep
+		== 2) && (common_var->nb_filos == 5 || common_var->nb_filos == 3))
 		usleep(100000);
 }
